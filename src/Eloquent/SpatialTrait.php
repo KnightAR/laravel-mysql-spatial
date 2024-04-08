@@ -8,6 +8,7 @@ use Grimzy\LaravelMysqlSpatial\Exceptions\UnknownSpatialRelationFunction;
 use Grimzy\LaravelMysqlSpatial\Types\Geometry;
 use Grimzy\LaravelMysqlSpatial\Types\GeometryInterface;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Trait SpatialTrait.
@@ -28,6 +29,8 @@ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
  * @method static orderBySpatial($geometryColumn, $geometry, $orderFunction, $direction = 'asc')
  * @method static orderByDistance($geometryColumn, $geometry, $direction = 'asc')
  * @method static orderByDistanceSphere($geometryColumn, $geometry, $direction = 'asc')
+ *
+ * @mixin Model
  */
 trait SpatialTrait
 {
@@ -40,9 +43,9 @@ trait SpatialTrait
      * protected $spatialFields = [];
      */
 
-    public $geometries = [];
+    public array $geometries = [];
 
-    protected $stRelations = [
+    protected array $stRelations = [
         'within',
         'crosses',
         'contains',
@@ -53,7 +56,7 @@ trait SpatialTrait
         'touches',
     ];
 
-    protected $stOrderFunctions = [
+    protected array $stOrderFunctions = [
         'distance',
         'distance_sphere',
     ];
@@ -130,6 +133,13 @@ trait SpatialTrait
         return true;
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
+     * @param string $geometryColumn
+     * @param GeometryInterface $geometry
+     * @param $distance
+     * @return EloquentBuilder|\Illuminate\Database\Query\Builder
+     */
     public function scopeDistance($query, $geometryColumn, $geometry, $distance)
     {
         $this->isColumnAllowed($geometryColumn);
@@ -143,6 +153,13 @@ trait SpatialTrait
         return $query;
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
+     * @param string $geometryColumn
+     * @param GeometryInterface $geometry
+     * @param $distance
+     * @return EloquentBuilder|\Illuminate\Database\Query\Builder
+     */
     public function scopeDistanceExcludingSelf($query, $geometryColumn, $geometry, $distance)
     {
         $this->isColumnAllowed($geometryColumn);
@@ -157,6 +174,12 @@ trait SpatialTrait
         return $query;
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
+     * @param string $geometryColumn
+     * @param GeometryInterface $geometry
+     * @return EloquentBuilder|\Illuminate\Database\Query\Builder
+     */
     public function scopeDistanceValue($query, $geometryColumn, $geometry)
     {
         $this->isColumnAllowed($geometryColumn);
@@ -171,8 +194,17 @@ trait SpatialTrait
             $geometry->toWkt(),
             $geometry->getSrid(),
         ]);
+
+        return $query;
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
+     * @param string $geometryColumn
+     * @param GeometryInterface $geometry
+     * @param $distance
+     * @return EloquentBuilder|\Illuminate\Database\Query\Builder
+     */
     public function scopeDistanceSphere($query, $geometryColumn, $geometry, $distance)
     {
         $this->isColumnAllowed($geometryColumn);
@@ -186,6 +218,13 @@ trait SpatialTrait
         return $query;
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
+     * @param string $geometryColumn
+     * @param GeometryInterface $geometry
+     * @param $distance
+     * @return EloquentBuilder|\Illuminate\Database\Query\Builder
+     */
     public function scopeDistanceSphereExcludingSelf($query, $geometryColumn, $geometry, $distance)
     {
         $this->isColumnAllowed($geometryColumn);
@@ -200,6 +239,12 @@ trait SpatialTrait
         return $query;
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
+     * @param string $geometryColumn
+     * @param GeometryInterface $geometry
+     * @return EloquentBuilder|\Illuminate\Database\Query\Builder
+     */
     public function scopeDistanceSphereValue($query, $geometryColumn, $geometry)
     {
         $this->isColumnAllowed($geometryColumn);
@@ -213,8 +258,16 @@ trait SpatialTrait
             $geometry->toWkt(),
             $geometry->getSrid(),
         ]);
-    }
 
+        return $query;
+    }
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
+     * @param string $geometryColumn
+     * @param GeometryInterface $geometry
+     * @param string $relationship
+     * @return EloquentBuilder|\Illuminate\Database\Query\Builder
+     */
     public function scopeComparison($query, $geometryColumn, $geometry, $relationship)
     {
         $this->isColumnAllowed($geometryColumn);

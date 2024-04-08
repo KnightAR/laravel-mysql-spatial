@@ -26,11 +26,18 @@ abstract class Geometry implements GeometryInterface, Jsonable, \JsonSerializabl
         $this->srid = (int) $srid;
     }
 
+    /**
+     * @return int
+     */
     public function getSrid()
     {
         return $this->srid;
     }
 
+    /**
+     * @param int $srid
+     * @return void
+     */
     public function setSrid($srid)
     {
         $this->srid = (int) $srid;
