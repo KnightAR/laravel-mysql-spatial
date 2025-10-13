@@ -5,13 +5,16 @@ namespace Grimzy\LaravelMysqlSpatial\Schema\Grammars;
 use Grimzy\LaravelMysqlSpatial\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\MySqlGrammar as IlluminateMySqlGrammar;
 use Illuminate\Support\Fluent;
+use Illuminate\Database\Connection;
 
 class MySqlGrammar extends IlluminateMySqlGrammar
 {
     const COLUMN_MODIFIER_SRID = 'Srid';
 
-    public function __construct()
+    public function __construct(Connection $connection)
     {
+        parent::__construct($connection);
+
         // Enable SRID as a column modifier
         if (!in_array(self::COLUMN_MODIFIER_SRID, $this->modifiers)) {
             $this->modifiers[] = self::COLUMN_MODIFIER_SRID;

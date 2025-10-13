@@ -8,7 +8,7 @@ class MySqlGrammarTest extends BaseTestCase
 {
     public function testAddingGeometry()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->geometry('foo');
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -18,7 +18,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingPoint()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->point('foo');
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -28,7 +28,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingLinestring()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->linestring('foo');
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -38,7 +38,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingPolygon()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->polygon('foo');
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -48,7 +48,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingMultipoint()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->multipoint('foo');
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -58,7 +58,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingMultiLinestring()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->multilinestring('foo');
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -68,7 +68,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingMultiPolygon()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->multipolygon('foo');
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -78,7 +78,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingGeometryCollection()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->geometrycollection('foo');
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -88,7 +88,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingGeometryWithSrid()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->geometry('foo', null, 4326);
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -98,7 +98,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingPointWithSrid()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->point('foo', 4326);
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -108,7 +108,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingLinestringWithSrid()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->linestring('foo', 4326);
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -118,7 +118,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingPolygonWithSrid()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->polygon('foo', 4326);
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -128,7 +128,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingMultipointWithSrid()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->multipoint('foo', 4326);
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -138,7 +138,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingMultiLinestringWithSrid()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->multilinestring('foo', 4326);
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -148,7 +148,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingMultiPolygonWithSrid()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->multipolygon('foo', 4326);
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -158,7 +158,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddingGeometryCollectionWithSrid()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->geometrycollection('foo', 4326);
         $statements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
 
@@ -168,7 +168,7 @@ class MySqlGrammarTest extends BaseTestCase
 
     public function testAddRemoveSpatialIndex()
     {
-        $blueprint = new Blueprint('test');
+        $blueprint = new Blueprint($this->getConnection(), 'test');
         $blueprint->point('foo');
         $blueprint->spatialIndex('foo');
         $addStatements = $blueprint->toSql($this->getConnection(), $this->getGrammar());
@@ -191,11 +191,24 @@ class MySqlGrammarTest extends BaseTestCase
      */
     protected function getConnection()
     {
-        return Mockery::mock(MysqlConnection::class);
+        $connection = Mockery::mock(MysqlConnection::class);
+        $connection->shouldReceive('getTablePrefix')
+            ->andReturn('');
+        $connection->shouldReceive('getConfig')
+            ->andReturn([]);
+        
+        $grammar = new MySqlGrammar($connection);
+        $connection->shouldReceive('getSchemaGrammar')
+            ->andReturn($grammar);
+        
+        return $connection;
     }
 
     protected function getGrammar()
     {
-        return new MySqlGrammar();
+        $connection = Mockery::mock(MysqlConnection::class);
+        $connection->shouldReceive('getTablePrefix')
+            ->andReturn('');
+        return new MySqlGrammar($connection);
     }
 }

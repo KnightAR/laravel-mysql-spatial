@@ -22,17 +22,12 @@ abstract class IntegrationBaseTestCase extends BaseTestCase
 
         // Use hardcoded values for testing
         $app['config']->set('database.default', 'mysql');
+        $app['config']->set('database.connections.mysql.driver', 'mysql');
         $app['config']->set('database.connections.mysql.host', env('DB_HOST'));
         $app['config']->set('database.connections.mysql.port', env('DB_PORT'));
         $app['config']->set('database.connections.mysql.database', env('DB_DATABASE'));
         $app['config']->set('database.connections.mysql.username', env('DB_USERNAME'));
         $app['config']->set('database.connections.mysql.password', env('DB_PASSWORD'));
-        /*$app['config']->set('database.connections.mysql.driver', 'mysql');
-        $app['config']->set('database.connections.mysql.host', 'localhost');
-        $app['config']->set('database.connections.mysql.port', '3306');
-        $app['config']->set('database.connections.mysql.database', 'test');
-        $app['config']->set('database.connections.mysql.username', 'root');
-        $app['config']->set('database.connections.mysql.password', '');*/
 
         return $app;
     }
