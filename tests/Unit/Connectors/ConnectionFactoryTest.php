@@ -5,7 +5,7 @@ use Grimzy\LaravelMysqlSpatial\MysqlConnection;
 use Illuminate\Container\Container;
 use Stubs\PDOStub;
 
-class ConnectionFactoryBaseTest extends BaseTestCase
+class ConnectionFactoryTest extends BaseTestCase
 {
     public function testMakeCallsCreateConnection()
     {

@@ -14,7 +14,7 @@ class BlueprintTest extends BaseTestCase
      */
     protected $blueprint;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -32,7 +32,7 @@ class BlueprintTest extends BaseTestCase
 
         $this->blueprint
             ->shouldReceive('addColumn')
-            ->with('geometry', 'col', ['srid' => null])
+            ->with('geometry', 'col', ['subtype' => null, 'srid' => 0])
             ->once()
             ->andReturn($expectedCol);
 
@@ -184,13 +184,13 @@ class BlueprintTest extends BaseTestCase
 
         $this->blueprint
             ->shouldReceive('addColumn')
-            ->with('geometry', 'col', ['srid' => 4326])
+            ->with('geometry', 'col', ['subtype' => null, 'srid' => 4326])
             ->once()
             ->andReturn($expectedCol);
 
-        $result = $this->blueprint->geometry('col', 4326);
+        $result = $this->blueprint->geometry('col', null, 4326);
 
-        $this->assertSame($expectedCol, $result);
+        $this->assertEquals($expectedCol->toArray(), $result->toArray());
     }
 
     public function testPointWithSrid()

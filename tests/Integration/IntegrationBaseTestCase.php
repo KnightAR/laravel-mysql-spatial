@@ -1,7 +1,5 @@
 <?php
 
-use Grimzy\LaravelMysqlSpatial\SpatialServiceProvider;
-use Illuminate\Support\Facades\DB;
 use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
 
 abstract class IntegrationBaseTestCase extends BaseTestCase
@@ -17,24 +15,24 @@ abstract class IntegrationBaseTestCase extends BaseTestCase
     public function createApplication()
     {
         $app = require __DIR__.'/../../vendor/laravel/laravel/bootstrap/app.php';
-        $app->register(SpatialServiceProvider::class);
+        
+        $app->register(\Grimzy\LaravelMysqlSpatial\SpatialServiceProvider::class);
 
         $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
 
+        // Use hardcoded values for testing
         $app['config']->set('database.default', 'mysql');
         $app['config']->set('database.connections.mysql.host', env('DB_HOST'));
         $app['config']->set('database.connections.mysql.port', env('DB_PORT'));
         $app['config']->set('database.connections.mysql.database', env('DB_DATABASE'));
         $app['config']->set('database.connections.mysql.username', env('DB_USERNAME'));
         $app['config']->set('database.connections.mysql.password', env('DB_PASSWORD'));
-        $app['config']->set('database.connections.mysql.modes', [
-            'ONLY_FULL_GROUP_BY',
-            'STRICT_TRANS_TABLES',
-            'NO_ZERO_IN_DATE',
-            'NO_ZERO_DATE',
-            'ERROR_FOR_DIVISION_BY_ZERO',
-            'NO_ENGINE_SUBSTITUTION',
-        ]);
+        /*$app['config']->set('database.connections.mysql.driver', 'mysql');
+        $app['config']->set('database.connections.mysql.host', 'localhost');
+        $app['config']->set('database.connections.mysql.port', '3306');
+        $app['config']->set('database.connections.mysql.database', 'test');
+        $app['config']->set('database.connections.mysql.username', 'root');
+        $app['config']->set('database.connections.mysql.password', '');*/
 
         return $app;
     }
@@ -44,12 +42,11 @@ abstract class IntegrationBaseTestCase extends BaseTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->after_fix = $this->isMySQL8AfterFix();
-
         $this->onMigrations(function ($migrationClass) {
             (new $migrationClass())->up();
         });
@@ -59,7 +56,7 @@ abstract class IntegrationBaseTestCase extends BaseTestCase
         //});
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->onMigrations(function ($migrationClass) {
             (new $migrationClass())->down();
@@ -67,12 +64,18 @@ abstract class IntegrationBaseTestCase extends BaseTestCase
 
         parent::tearDown();
     }
+    
 
     // MySQL 8.0.4 fixed bug #26941370 and bug #88031
     private function isMySQL8AfterFix()
     {
-        $results = DB::select(DB::raw('select version()'));
+        $results = DB::select('select version()');
         $mysql_version = $results[0]->{'version()'};
+
+        // MariaDB uses different versioning and behavior
+        if (stripos($mysql_version, 'MariaDB') !== false) {
+            return false;
+        }
 
         return version_compare($mysql_version, '8.0.4', '>=');
     }

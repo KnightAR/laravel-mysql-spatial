@@ -4,9 +4,9 @@ use PHPUnit\Framework\TestCase;
 
 abstract class BaseTestCase extends TestCase
 {
-    public function tearDown()
+    protected function tearDown(): void
     {
-        Mockery::close();
+        \Mockery::close();
     }
 
     protected function assertException($exceptionName, $exceptionMessage = '', $exceptionCode = 0)
@@ -16,7 +16,9 @@ abstract class BaseTestCase extends TestCase
             parent::expectExceptionMessage($exceptionMessage);
             parent::expectExceptionCode($exceptionCode);
         } else {
-            $this->setExpectedException($exceptionName, $exceptionMessage, $exceptionCode);
+            $this->expectException($exceptionName);
+            $this->expectExceptionMessage($exceptionMessage);
+            $this->expectExceptionCode($exceptionCode);
         }
     }
 }

@@ -10,13 +10,14 @@ class Blueprint extends IlluminateBlueprint
      * Add a geometry column on the table.
      *
      * @param string   $column
-     * @param null|int $srid
+     * @param string|null $subtype
+     * @param int      $srid
      *
-     * @return \Illuminate\Support\Fluent
+     * @return \Illuminate\Database\Schema\ColumnDefinition
      */
-    public function geometry($column, $srid = null)
+    public function geometry($column, $subtype = null, $srid = 0)
     {
-        return $this->addColumn('geometry', $column, compact('srid'));
+        return $this->addColumn('geometry', $column, compact('subtype', 'srid'));
     }
 
     /**
@@ -25,7 +26,7 @@ class Blueprint extends IlluminateBlueprint
      * @param string   $column
      * @param null|int $srid
      *
-     * @return \Illuminate\Support\Fluent
+     * @return \Illuminate\Database\Schema\ColumnDefinition
      */
     public function point($column, $srid = null)
     {
@@ -38,9 +39,9 @@ class Blueprint extends IlluminateBlueprint
      * @param string   $column
      * @param null|int $srid
      *
-     * @return \Illuminate\Support\Fluent
+     * @return \Illuminate\Database\Schema\ColumnDefinition
      */
-    public function lineString($column, $srid = null)
+    public function linestring($column, $srid = null)
     {
         return $this->addColumn('linestring', $column, compact('srid'));
     }
@@ -51,7 +52,7 @@ class Blueprint extends IlluminateBlueprint
      * @param string   $column
      * @param null|int $srid
      *
-     * @return \Illuminate\Support\Fluent
+     * @return \Illuminate\Database\Schema\ColumnDefinition
      */
     public function polygon($column, $srid = null)
     {
@@ -64,9 +65,9 @@ class Blueprint extends IlluminateBlueprint
      * @param string   $column
      * @param null|int $srid
      *
-     * @return \Illuminate\Support\Fluent
+     * @return \Illuminate\Database\Schema\ColumnDefinition
      */
-    public function multiPoint($column, $srid = null)
+    public function multipoint($column, $srid = null)
     {
         return $this->addColumn('multipoint', $column, compact('srid'));
     }
@@ -77,9 +78,9 @@ class Blueprint extends IlluminateBlueprint
      * @param string   $column
      * @param null|int $srid
      *
-     * @return \Illuminate\Support\Fluent
+     * @return \Illuminate\Database\Schema\ColumnDefinition
      */
-    public function multiLineString($column, $srid = null)
+    public function multilinestring($column, $srid = null)
     {
         return $this->addColumn('multilinestring', $column, compact('srid'));
     }
@@ -90,9 +91,9 @@ class Blueprint extends IlluminateBlueprint
      * @param string   $column
      * @param null|int $srid
      *
-     * @return \Illuminate\Support\Fluent
+     * @return \Illuminate\Database\Schema\ColumnDefinition
      */
-    public function multiPolygon($column, $srid = null)
+    public function multipolygon($column, $srid = null)
     {
         return $this->addColumn('multipolygon', $column, compact('srid'));
     }
@@ -103,35 +104,10 @@ class Blueprint extends IlluminateBlueprint
      * @param string   $column
      * @param null|int $srid
      *
-     * @return \Illuminate\Support\Fluent
+     * @return \Illuminate\Database\Schema\ColumnDefinition
      */
-    public function geometryCollection($column, $srid = null)
+    public function geometrycollection($column, $srid = null)
     {
         return $this->addColumn('geometrycollection', $column, compact('srid'));
-    }
-
-    /**
-     * Specify a spatial index for the table.
-     *
-     * @param string|array $columns
-     * @param string       $name
-     *
-     * @return \Illuminate\Support\Fluent
-     */
-    public function spatialIndex($columns, $name = null)
-    {
-        return $this->indexCommand('spatial', $columns, $name);
-    }
-
-    /**
-     * Indicate that the given index should be dropped.
-     *
-     * @param string|array $index
-     *
-     * @return \Illuminate\Support\Fluent
-     */
-    public function dropSpatialIndex($index)
-    {
-        return $this->dropIndexCommand('dropIndex', 'spatial', $index);
     }
 }

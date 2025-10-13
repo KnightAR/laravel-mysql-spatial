@@ -15,8 +15,10 @@ Please check the documentation for your MySQL version. MySQL's Extension for Spa
 - `1.x.x`: MySQL 5.6 (also supports MySQL 5.5 but not all spatial analysis functions)
 - `2.x.x`: MySQL 5.7 and 8.0 (Laravel version < 8.0)
 - `3.x.x`: MySQL 8.0 with SRID support (Laravel version < 8.0)
-- **`4.x.x`: MySQL 8.0 with SRID support (Laravel 8+) [Current branch]**
+- `4.x.x`: MySQL 8.0 with SRID support (Laravel 8+)
 - `5.x.x`: MySQL 5.7 and 8.0 (Laravel 8+)
+- `6.x.x`: MySQL 8.0 with SRID support (Laravel 9 & 10)
+- **`7.x.x`: MySQL 8.0 with SRID support (Laravel 11+) [Current branch]**
 
 This package also works with MariaDB. Please refer to the [MySQL/MariaDB Spatial Support Matrix](https://mariadb.com/kb/en/library/mysqlmariadb-spatial-support-matrix/) for compatibility.
 
