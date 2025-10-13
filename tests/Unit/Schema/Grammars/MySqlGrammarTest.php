@@ -1,10 +1,12 @@
 <?php
 
+namespace Schema\Grammars;
+
 use Grimzy\LaravelMysqlSpatial\MysqlConnection;
 use Grimzy\LaravelMysqlSpatial\Schema\Blueprint;
 use Grimzy\LaravelMysqlSpatial\Schema\Grammars\MySqlGrammar;
 
-class MySqlGrammarTest extends BaseTestCase
+class MySqlGrammarTest extends \BaseTestCase
 {
     public function testAddingGeometry()
     {
@@ -187,26 +189,26 @@ class MySqlGrammarTest extends BaseTestCase
     }
 
     /**
-     * @return Connection
+     * @return (\Mockery\MockInterface&object&\Mockery\LegacyMockInterface)|MysqlConnection|(MysqlConnection&\Mockery\MockInterface&object&\Mockery\LegacyMockInterface)
      */
     protected function getConnection()
     {
-        $connection = Mockery::mock(MysqlConnection::class);
+        $connection = \Mockery::mock(MysqlConnection::class);
         $connection->shouldReceive('getTablePrefix')
             ->andReturn('');
         $connection->shouldReceive('getConfig')
             ->andReturn([]);
-        
+
         $grammar = new MySqlGrammar($connection);
         $connection->shouldReceive('getSchemaGrammar')
             ->andReturn($grammar);
-        
+
         return $connection;
     }
 
     protected function getGrammar()
     {
-        $connection = Mockery::mock(MysqlConnection::class);
+        $connection = \Mockery::mock(MysqlConnection::class);
         $connection->shouldReceive('getTablePrefix')
             ->andReturn('');
         return new MySqlGrammar($connection);

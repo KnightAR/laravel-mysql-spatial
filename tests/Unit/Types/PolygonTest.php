@@ -1,10 +1,12 @@
 <?php
 
+namespace Types;
+
 use Grimzy\LaravelMysqlSpatial\Types\LineString;
 use Grimzy\LaravelMysqlSpatial\Types\Point;
 use Grimzy\LaravelMysqlSpatial\Types\Polygon;
 
-class PolygonTest extends BaseTestCase
+class PolygonTest extends \BaseTestCase
 {
     private $polygon;
 

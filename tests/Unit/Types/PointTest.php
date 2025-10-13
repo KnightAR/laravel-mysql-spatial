@@ -1,8 +1,10 @@
 <?php
 
+namespace Types;
+
 use Grimzy\LaravelMysqlSpatial\Types\Point;
 
-class PointTest extends BaseTestCase
+class PointTest extends \BaseTestCase
 {
     public function testFromWKT()
     {

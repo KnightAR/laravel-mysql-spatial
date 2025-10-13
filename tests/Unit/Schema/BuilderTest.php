@@ -13,7 +13,7 @@ class BuilderTest extends BaseTestCase
     public function testReturnsCorrectBlueprint()
     {
         $grammar = Mockery::mock(\Grimzy\LaravelMysqlSpatial\Schema\Grammars\MySqlGrammar::class);
-        
+
         $connection = Mockery::mock(MysqlConnection::class);
         $connection->shouldReceive('getSchemaGrammar')->andReturn($grammar);
 

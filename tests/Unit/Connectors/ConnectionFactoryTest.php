@@ -1,17 +1,19 @@
 <?php
 
+namespace Connectors;
+
 use Grimzy\LaravelMysqlSpatial\Connectors\ConnectionFactory;
 use Grimzy\LaravelMysqlSpatial\MysqlConnection;
 use Illuminate\Container\Container;
 use Stubs\PDOStub;
 
-class ConnectionFactoryTest extends BaseTestCase
+class ConnectionFactoryTest extends \BaseTestCase
 {
     public function testMakeCallsCreateConnection()
     {
         $pdo = new PDOStub();
 
-        $factory = Mockery::mock(ConnectionFactory::class, [new Container()])->makePartial();
+        $factory = \Mockery::mock(ConnectionFactory::class, [new Container()])->makePartial();
         $factory->shouldAllowMockingProtectedMethods();
         $conn = $factory->createConnection('mysql', $pdo, 'database');
 
@@ -22,7 +24,7 @@ class ConnectionFactoryTest extends BaseTestCase
     {
         $pdo = new PDOStub();
 
-        $factory = Mockery::mock(ConnectionFactory::class, [new Container()])->makePartial();
+        $factory = \Mockery::mock(ConnectionFactory::class, [new Container()])->makePartial();
         $factory->shouldAllowMockingProtectedMethods();
         $conn = $factory->createConnection('pgsql', $pdo, 'database');
 

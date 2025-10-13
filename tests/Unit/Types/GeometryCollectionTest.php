@@ -1,12 +1,14 @@
 <?php
 
+namespace Types;
+
 use Grimzy\LaravelMysqlSpatial\Types\GeometryCollection;
 use Grimzy\LaravelMysqlSpatial\Types\GeometryInterface;
 use Grimzy\LaravelMysqlSpatial\Types\LineString;
 use Grimzy\LaravelMysqlSpatial\Types\Point;
 use Grimzy\LaravelMysqlSpatial\Types\Polygon;
 
-class GeometryCollectionTest extends BaseTestCase
+class GeometryCollectionTest extends \BaseTestCase
 {
     public function testFromWKT()
     {
